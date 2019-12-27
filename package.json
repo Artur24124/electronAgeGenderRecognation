@@ -31,15 +31,6 @@
     "wait-on": "3.3.0"
   },
   "build": {
-    "win": {
-      "target": "msi"
-    },
-    "linux": {
-      "target": [
-        "AppImage",
-        "deb"
-      ]
-    },
     "publish": {
       "provider": "github"
     }
@@ -52,7 +43,6 @@
     "electron-build": "electron-builder",
     "release": "yarn react-build && electron-builder --publish=always",
     "build": "yarn react-build && yarn electron-build",
-    "lin-builder": "electron-builder --linux --windows",
     "start": "concurrently \"cross-env BROWSER=none yarn react-start\" \"wait-on http://localhost:3000 && electron .\""
   },
   "browserslist": {
