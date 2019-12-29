@@ -17,8 +17,7 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            items: null,
-            error: false
+            items: null
         };
         this.webcam = React.createRef();
     }
@@ -35,21 +34,15 @@ class App extends Component {
         const screenshot = this.webcam.current.getScreenshot();
         let img = await faceapi.fetchImage(screenshot);
 
-        try {
-            const detections = await faceapi.detectAllFaces(img, new faceapi.SsdMobilenetv1Options())
-                .withFaceLandmarks().withAgeAndGender();
+        const detections = await faceapi.detectAllFaces(img, new faceapi.SsdMobilenetv1Options())
+            .withFaceLandmarks().withAgeAndGender();
 
-            this.props.createScreen({
-                _id: Math.random().toString(36).substr(2, 9),
-                age: Math.round(detections[0].age),
-                gender: detections[0].gender,
-                screenshot: screenshot
-            });
-
-            this.setState({ error: false })
-        } catch (e) {
-            this.setState({ error: e.message })
-        }
+        this.props.createScreen({
+            _id: Math.random().toString(36).substr(2, 9),
+            age: Math.round(detections[0].age),
+            gender: detections[0].gender,
+            screenshot: screenshot
+        });
     };
 
     render() {
@@ -71,11 +64,6 @@ class App extends Component {
                 <button className='button' onClick={this.takeScreenshot} disabled={loading}>
                     Capture
                 </button>
-                {
-                    this.state.error ? (
-                        <p className='error'>Error. Please try again.</p>
-                    ) : null
-                }
                 {
                     !loading ? (
                         <div className='results'>
